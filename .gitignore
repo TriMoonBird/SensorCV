@@ -1,0 +1,10 @@
+Build/*
+Pic/*
+Result/*
+.Settings/*
+.DS_Store
+.cproject
+.project
+*.bak
+*.out
+*.jpg

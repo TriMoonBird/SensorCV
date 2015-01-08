@@ -1,0 +1,5 @@
+PROJECT( SensorCV )
+FIND_PACKAGE( OpenCV REQUIRED )
+ADD_EXECUTABLE( SensorCV SensorCV.cxx ImageTransform.cxx ImageTransform.h)
+INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS})
+TARGET_LINK_LIBRARIES( SensorCV ${OpenCV_LIBS} )
