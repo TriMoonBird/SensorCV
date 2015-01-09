@@ -5,20 +5,28 @@
 #include "opencv2/features2d/features2d.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/nonfree/features2d.hpp"
+#include "ImageTransform.h"
 
 using namespace cv;
 using namespace std;
 
 int main( int argc, char** argv )
 {
-  String path_1 = "../Pic/img_c.jpg";
-  String path_2 = "../Pic/img_d.jpg";
+  String path_1 = "../Pic/img_1.jpg";
+  String path_2 = "../Pic/img_2.jpg";
 
-  Mat img_1 = imread( path_1, CV_LOAD_IMAGE_COLOR );
-  Mat img_2 = imread( path_2, CV_LOAD_IMAGE_COLOR );
+  Mat rawimg_1 = imread( path_1, CV_LOAD_IMAGE_COLOR );
+  Mat rawimg_2 = imread( path_2, CV_LOAD_IMAGE_COLOR );
 
-  if( !img_1.data || !img_2.data )
+
+  if( !rawimg_1.data || !rawimg_2.data )
   { std::cout<< " --(!) Error reading images " << std::endl; return -1; }
+
+  Rect myROI_1(0, 0, 3300, 1800);
+  Rect myROI_2(0, 0, 3300, 1800);
+
+  Mat img_1 = extractROI(rawimg_1, myROI_1);
+  Mat img_2 = extractROI(rawimg_2, myROI_2);
 
   //-- Step 1: Detect the keypoints using SIFT Detector
   int minHessian = 400;
@@ -56,14 +64,14 @@ int main( int argc, char** argv )
   cout << "-- Max dist : " << max_dist << endl;
   cout << "-- Min dist : " << min_dist << endl;
 
-  //-- Draw only "good" matches (i.e. whose distance is less than 2*min_dist,
+  //-- Draw only "good" matches (i.e. whose distance is less than 1.5*min_dist,
   //-- or a small arbitary value ( 0.02 ) in the event that min_dist is very
   //-- small)
   std::vector< DMatch > good_matches;
 
   for( int i = 0; i < descriptors_1.rows; i++ )
   {
-	if( matches[i].distance <= max(2*min_dist, 0.02) )
+	if( matches[i].distance <= max(1.5*min_dist, 0.02) )
     { good_matches.push_back( matches[i]); }
   }
 
@@ -97,48 +105,3 @@ int main( int argc, char** argv )
 
   return 0;
 }
-
-
-
-
-
-/*
-#include <opencv2/core/core.hpp>
-#include <opencv2/opencv.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <iostream>
-
-#include "ImageTransform.h"
-
-using namespace cv;
-using namespace std;
-
-int main()
-{
-	string path = "../lena.jpg";
-	Mat image = imread(path, IMREAD_COLOR);
-
-	if(!image.data)
-	{
-		cout <<  "Could not open or find the image" << endl;
-		return -1;
-	}
-
-	Mat a(2, 3, CV_64FC1, Scalar(1));
-	Mat b(3, 2, CV_64FC1, Scalar(1));
-	Mat c = matMultiply(a, b);
-
-	cout << c << endl;
-	//=====
-	Mat image_change = rotateImage(image, 30);
-	namedWindow( "Display window", WINDOW_AUTOSIZE );
-	imshow( "Display window", image);
-
-	namedWindow( "Display change", WINDOW_AUTOSIZE );
-	imshow( "Display change", image_change);
-	//=====
-
-	waitKey(0);
-	return 0;
-}
-*/

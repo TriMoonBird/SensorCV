@@ -21,6 +21,14 @@ Mat changeColor(Mat& image)
     return I;
 }
 
+Mat extractROI(Mat& image, Rect roi)
+{
+	Mat cropped;
+	Mat croppedRef(image, roi);
+	croppedRef.copyTo(cropped);
+	return cropped;
+}
+
 Mat rotateImage(Mat& src, double angle)
 {
 	Mat ret;

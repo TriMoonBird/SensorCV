@@ -8,6 +8,7 @@ using namespace cv;
 #define _IMAGETRASFORM_H_
 
 Mat changeColor(Mat& image);
+Mat extractROI(Mat& image, Rect roi);
 Mat rotateImage(Mat& src, double angle);
 Mat matMultiply(Mat& A, Mat& B);
 
